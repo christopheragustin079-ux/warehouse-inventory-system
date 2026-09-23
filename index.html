@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warehouse Inventory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginPage" class="auth-page page">
+    <div class="auth-shell">
+      <div class="auth-brand">
+        <div class="brand-mark">WI</div>
+        <div>
+          <strong>Warehouse Inventory</strong>
+          <span>Stock management</span>
+        </div>
+      </div>
+      <div class="login-card">
+        <div class="eyebrow">WELCOME BACK</div>
+        <h1>Sign in to your account</h1>
+        <p class="auth-subtitle">Manage your products and warehouse stock in one place.</p>
+        <form onsubmit="login(); return false;">
+          <label>Username</label>
+          <input id="loginUsername" autocomplete="username" placeholder="Enter your username" required>
+          <label>Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter your password"
+            required>
+          <button class="primary-btn" type="submit">Sign In <span>→</span></button>
+        </form>
+        <div class="auth-divider"><span>NEW USER?</span></div>
+        <button class="secondary-btn" onclick="showRegister()">Create an account</button>
+      </div>
+      <p class="auth-footer">Warehouse Inventory Management System</p>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="registerPage" class="auth-page page hidden">
+    <div class="auth-shell">
+      <div class="auth-brand">
+        <div class="brand-mark">WI</div>
+        <div>
+          <strong>Warehouse Inventory</strong>
+          <span>Create your workspace</span>
+        </div>
+      </div>
+      <div class="login-card">
+        <div class="eyebrow">GET STARTED</div>
+        <h1>Create your account</h1>
+        <p class="auth-subtitle">Register first, then use your account to manage your inventory.</p>
+        <form onsubmit="registerUser(); return false;">
+          <label>Username</label>
+          <input id="registerUsername" autocomplete="username" placeholder="Choose a username" required>
+          <label>Password</label>
+          <input id="registerPassword" type="password" autocomplete="new-password" placeholder="Choose a password"
+            required>
+          <label>Confirm password</label>
+          <input id="registerConfirm" type="password" autocomplete="new-password" placeholder="Repeat your password"
+            required>
+          <button class="primary-btn" type="submit">Create Account <span>→</span></button>
+        </form>
+        <button class="text-btn" onclick="showLogin()">← Back to sign in</button>
+      </div>
+      <p class="auth-footer">Your inventory starts empty. Add your own products after signing in.</p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="appPage" class="app-page page hidden">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="brand-mark small">WI</div>
+        <div><strong>Warehouse</strong><span>Inventory</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" onclick="showProducts()"><span>▦</span> Products</button>
+      </nav>
+      <div class="side-bottom">
+        <div class="user-mini">
+          <div class="avatar" id="userAvatar">U</div>
+          <div><strong id="sideUser">User</strong><span>Account</span></div>
+        </div>
+        <button class="side-logout" onclick="logout()">↪ <span>Log out</span></button>
+      </div>
+    </aside>
+
+    <div class="app-content">
+      <header class="topbar">
+        <div class="mobile-brand">
+          <div class="brand-mark small">WI</div><strong>Warehouse Inventory</strong>
+        </div>
+        <div class="top-user"><span id="welcomeUser"></span>
+          <div class="avatar" id="topAvatar">U</div>
+        </div>
+      </header>
+
+      <main class="dashboard">
+        <section id="productsView">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">INVENTORY</div>
+              <h1>Products</h1>
+              <p>Keep track of your warehouse products and stock.</p>
+            </div>
+            <button class="mobile-logout" onclick="logout()">Log out</button>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">▦</div>
+              <div><span>Total Products</span><strong id="productCount">0</strong></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">□</div>
+              <div><span>Total Stock</span><strong id="stockCount">0</strong></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">＋</div>
+              <div><span>Stock Batches</span><strong id="batchCount">0</strong></div>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div class="search-box"><span>⌕</span><input id="productSearch" oninput="filterProducts()"
+                placeholder="Search products..."></div>
+            <div class="add-product">
+              <input id="newProduct" placeholder="New product name" onkeydown="if(event.key==='Enter') addProduct()">
+              <button onclick="addProduct()">+ Add Product</button>
+            </div>
+          </div>
+
+          <div class="section-label">
+            <div>
+              <h2>Your Products</h2>
+              <p>Click a product to manage its LIFO stock.</p>
+            </div>
+          </div>
+          <div id="products" class="products"></div>
+        </section>
+
+        <section id="stackView" class="hidden">
+          <div class="stack-heading">
+            <div><button class="back" onclick="showProducts()">← Products</button>
+              <div class="eyebrow">STOCK MANAGEMENT</div>
+              <h1 id="stackTitle">PRODUCT STACK</h1>
+              <p>Last In, First Out (LIFO) stock arrangement.</p>
+            </div>
+          </div>
+          <div class="stock-actions">
+            <div class="action-field"><label>Box / Batch ID</label><input id="box" placeholder="e.g. BOX-001"></div>
+            <div class="action-field small-field"><label>Quantity</label><input id="qty" type="number" min="1"
+                value="1"></div>
+            <button class="push" onclick="pushStock()">＋ Add Stock</button>
+            <button class="pop" onclick="popStock()">− Remove Stock</button>
+          </div>
+          <div id="message"></div>
+          <div class="stack-panel">
+            <div class="stack-bar"><strong>Stock Batches</strong><span>TOP = newest batch</span></div>
+            <div class="stack-marker top-marker">TOP ↑</div>
+            <div id="stack"></div>
+            <div class="stack-marker">BOTTOM ↓</div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
