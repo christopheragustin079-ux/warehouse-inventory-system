@@ -5,8 +5,9 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-COPY . .
+COPY GroceryServer.java .
 
-RUN mvn package -DskipTests
+RUN mvn dependency:build-classpath -Dmdep.outputFile=cp.txt
+RUN javac -cp "$(cat cp.txt)" GroceryServer.java
 
-CMD ["java", "-cp", "target/classes:target/dependency/*", "GroceryServer"]
+CMD ["sh", "-c", "java -cp \".:$(cat cp.txt)\" GroceryServer"]
