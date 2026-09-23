@@ -15,7 +15,7 @@ public class GroceryServer {
                 "jdbc:mysql://localhost:3306/warehouse_inventory_db",
                 "root", "");
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", PORT), 0);
 
         server.createContext("/", exchange -> serveFile(exchange, "index.html", "text/html"));
         server.createContext("/style.css", exchange -> serveFile(exchange, "style.css", "text/css"));
